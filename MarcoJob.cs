@@ -33,7 +33,96 @@ namespace POE_Auto_Helper
                 MarcoEvent marcoEvent = JsonConvert.DeserializeObject<MarcoEvent>(json);
 
                 InputSimulator inputSimulator = new InputSimulator();
-                inputSimulator.Keyboard.KeyPress(marcoEvent.KeyboardKey);
+                switch (marcoEvent.EventType)
+                {
+                    case MarcoEvent.MarcoEventType.MouseEvent:
+                        switch (marcoEvent.MouseKey)
+                        {
+                            case MarcoEvent.MouseKeyType.LeftClick:
+                                switch (marcoEvent.KeyEvent)
+                                {
+                                    case MarcoEvent.KeyEventType.Down:
+                                        inputSimulator.Mouse.LeftButtonDown();
+                                        break;
+
+                                    case MarcoEvent.KeyEventType.Up:
+                                        inputSimulator.Mouse.LeftButtonUp();
+                                        break;
+
+                                    case MarcoEvent.KeyEventType.Press:
+                                        inputSimulator.Mouse.LeftButtonClick();
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+                                break;
+
+                            case MarcoEvent.MouseKeyType.MiddleClick:
+                                switch (marcoEvent.KeyEvent)
+                                {
+                                    case MarcoEvent.KeyEventType.Down:
+                                        break;
+
+                                    case MarcoEvent.KeyEventType.Up:
+                                        break;
+
+                                    case MarcoEvent.KeyEventType.Press:
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+                                break;
+
+                            case MarcoEvent.MouseKeyType.RightClick:
+                                switch (marcoEvent.KeyEvent)
+                                {
+                                    case MarcoEvent.KeyEventType.Down:
+                                        inputSimulator.Mouse.RightButtonDown();
+                                        break;
+
+                                    case MarcoEvent.KeyEventType.Up:
+                                        inputSimulator.Mouse.RightButtonUp();
+                                        break;
+
+                                    case MarcoEvent.KeyEventType.Press:
+                                        inputSimulator.Mouse.RightButtonClick();
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+                                break;
+
+                            default:
+                                break;
+                        }
+                        break;
+
+                    case MarcoEvent.MarcoEventType.KeyboardEvent:
+                        switch (marcoEvent.KeyEvent)
+                        {
+                            case MarcoEvent.KeyEventType.Down:
+                                inputSimulator.Keyboard.KeyDown(marcoEvent.KeyboardKey);
+                                break;
+
+                            case MarcoEvent.KeyEventType.Up:
+                                inputSimulator.Keyboard.KeyUp(marcoEvent.KeyboardKey);
+                                break;
+
+                            case MarcoEvent.KeyEventType.Press:
+                                inputSimulator.Keyboard.KeyPress(marcoEvent.KeyboardKey);
+                                break;
+
+                            default:
+                                break;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
             }
             catch (Exception ex)
             {

@@ -69,9 +69,10 @@ namespace POE_Auto_Helper
             {
                 return;
             }
-            Console.WriteLine("Start Marco after 3 sec");
 
-            Thread.Sleep(3 * 1000);
+            //Console.WriteLine("Start Marco after 3 sec");
+
+            //Thread.Sleep(3 * 1000);
 
             Console.WriteLine("Running...");
 
@@ -92,13 +93,38 @@ namespace POE_Auto_Helper
                 {
                     List<MarcoEvent> marcoEvents = new List<MarcoEvent>
                     {
+                        #region Flask
+
+                        new MarcoEvent()
+                        {
+                            EventType = MarcoEvent.MarcoEventType.KeyboardEvent,
+                            KeyboardKey = VirtualKeyCode.VK_1,
+                            KeyEvent = MarcoEvent.KeyEventType.Press,
+                            StartTime = TimeSpan.FromSeconds(0),
+                            TimeInterval = TimeSpan.FromSeconds(18),
+                            Repeat = MarcoEvent.RepeatType.RepeatForever
+                        },
+                        new MarcoEvent()
+                        {
+                            EventType = MarcoEvent.MarcoEventType.KeyboardEvent,
+                            KeyboardKey = VirtualKeyCode.VK_2,
+                            KeyEvent = MarcoEvent.KeyEventType.Press,
+                            StartTime = TimeSpan.FromSeconds(9),
+                            TimeInterval = TimeSpan.FromSeconds(18),
+                            Repeat = MarcoEvent.RepeatType.RepeatForever
+                        },
+
+                        #endregion Flask
+
+                        #region Skill
+
                         new MarcoEvent()
                         {
                             EventType = MarcoEvent.MarcoEventType.KeyboardEvent,
                             KeyboardKey = VirtualKeyCode.VK_W,
                             KeyEvent = MarcoEvent.KeyEventType.Press,
-                            StartTime = TimeSpan.FromSeconds(1),
-                            TimeInterval = TimeSpan.FromSeconds(6.4),
+                            StartTime = TimeSpan.FromSeconds(0.5),
+                            TimeInterval = TimeSpan.FromSeconds(6.3),
                             Repeat = MarcoEvent.RepeatType.RepeatForever
                         },
                         new MarcoEvent()
@@ -106,8 +132,8 @@ namespace POE_Auto_Helper
                             EventType = MarcoEvent.MarcoEventType.KeyboardEvent,
                             KeyboardKey = VirtualKeyCode.VK_E,
                             KeyEvent = MarcoEvent.KeyEventType.Press,
-                            StartTime = TimeSpan.FromSeconds(1),
-                            TimeInterval = TimeSpan.FromSeconds(6.4),
+                            StartTime = TimeSpan.FromSeconds(0.5),
+                            TimeInterval = TimeSpan.FromSeconds(6.3),
                             Repeat = MarcoEvent.RepeatType.RepeatForever
                         },
                         new MarcoEvent()
@@ -115,8 +141,8 @@ namespace POE_Auto_Helper
                             EventType = MarcoEvent.MarcoEventType.KeyboardEvent,
                             KeyboardKey = VirtualKeyCode.VK_R,
                             KeyEvent = MarcoEvent.KeyEventType.Press,
-                            StartTime = TimeSpan.FromSeconds(1),
-                            TimeInterval = TimeSpan.FromSeconds(8.3),
+                            StartTime = TimeSpan.FromSeconds(0.5),
+                            TimeInterval = TimeSpan.FromSeconds(8.2),
                             Repeat = MarcoEvent.RepeatType.RepeatForever
                         },
                         new MarcoEvent()
@@ -124,10 +150,12 @@ namespace POE_Auto_Helper
                             EventType = MarcoEvent.MarcoEventType.KeyboardEvent,
                             KeyboardKey = VirtualKeyCode.VK_T,
                             KeyEvent = MarcoEvent.KeyEventType.Press,
-                            StartTime = TimeSpan.FromSeconds(1),
+                            StartTime = TimeSpan.FromSeconds(0.5),
                             TimeInterval = TimeSpan.FromSeconds(3.4),
                             Repeat = MarcoEvent.RepeatType.RepeatForever
                         },
+
+                        #endregion Skill
                     };
                     File.WriteAllText(file.FullName, JsonConvert.SerializeObject(marcoEvents, Formatting.Indented));
                 }
