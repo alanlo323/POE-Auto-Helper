@@ -49,6 +49,7 @@ namespace POE_Auto_Helper
             Process[] processes = Process.GetProcessesByName(fileInfo.Name.Replace(fileInfo.Extension, ""));
             if (processes.Length >= 2)
             {
+                Console.WriteLine(processes.Length);
                 foreach (var proc in processes)
                 {
                     proc.Kill();
@@ -81,7 +82,7 @@ namespace POE_Auto_Helper
 
             RunMarco(marcoEvents);
 
-            Console.ReadKey();
+            Console.ReadLine();
         }
 
         private static List<MarcoEvent> LoadSetting(FileInfo runingLocation)
@@ -124,7 +125,7 @@ namespace POE_Auto_Helper
                             KeyboardKey = VirtualKeyCode.VK_W,
                             KeyEvent = MarcoEvent.KeyEventType.Press,
                             StartTime = TimeSpan.FromSeconds(0.5),
-                            TimeInterval = TimeSpan.FromSeconds(6.3),
+                            TimeInterval = TimeSpan.FromSeconds(6.2),
                             Repeat = MarcoEvent.RepeatType.RepeatForever
                         },
                         new MarcoEvent()
@@ -133,7 +134,7 @@ namespace POE_Auto_Helper
                             KeyboardKey = VirtualKeyCode.VK_E,
                             KeyEvent = MarcoEvent.KeyEventType.Press,
                             StartTime = TimeSpan.FromSeconds(0.5),
-                            TimeInterval = TimeSpan.FromSeconds(6.3),
+                            TimeInterval = TimeSpan.FromSeconds(6.2),
                             Repeat = MarcoEvent.RepeatType.RepeatForever
                         },
                         new MarcoEvent()
@@ -142,7 +143,7 @@ namespace POE_Auto_Helper
                             KeyboardKey = VirtualKeyCode.VK_R,
                             KeyEvent = MarcoEvent.KeyEventType.Press,
                             StartTime = TimeSpan.FromSeconds(0.5),
-                            TimeInterval = TimeSpan.FromSeconds(8.2),
+                            TimeInterval = TimeSpan.FromSeconds(8.1),
                             Repeat = MarcoEvent.RepeatType.RepeatForever
                         },
                         new MarcoEvent()
@@ -151,7 +152,7 @@ namespace POE_Auto_Helper
                             KeyboardKey = VirtualKeyCode.VK_T,
                             KeyEvent = MarcoEvent.KeyEventType.Press,
                             StartTime = TimeSpan.FromSeconds(0.5),
-                            TimeInterval = TimeSpan.FromSeconds(3.4),
+                            TimeInterval = TimeSpan.FromSeconds(3.2),
                             Repeat = MarcoEvent.RepeatType.RepeatForever
                         },
 
