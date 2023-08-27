@@ -1,18 +1,13 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Quartz.Impl;
-using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.VisualBasic;
-using WindowsInput.Native;
 using System.Security.Principal;
 using System.Reflection;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace POE_Auto_Helper
 {
@@ -80,9 +75,17 @@ namespace POE_Auto_Helper
             IntPtr handle = Process.GetCurrentProcess().MainWindowHandle;
             ShowWindow(handle, 6);
 
-            RunMarco(marcoEvents);
+            // Run in background thread
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+                RunMarco(marcoEvents);
+                Environment.Exit(0);
+            }).Start();
 
-            Console.ReadLine();
+            Console.WriteLine("All job done");
+
+            Console.ReadKey();
         }
 
         private static List<MarcoEvent> LoadSetting(FileInfo runingLocation)
@@ -92,72 +95,7 @@ namespace POE_Auto_Helper
                 FileInfo file = new FileInfo($@"{runingLocation.Directory}/marco.json");
                 if (!file.Exists)
                 {
-                    List<MarcoEvent> marcoEvents = new List<MarcoEvent>
-                    {
-                        #region Flask
-
-                        new MarcoEvent()
-                        {
-                            EventType = MarcoEvent.MarcoEventType.KeyboardEvent,
-                            KeyboardKey = VirtualKeyCode.VK_1,
-                            KeyEvent = MarcoEvent.KeyEventType.Press,
-                            StartTime = TimeSpan.FromSeconds(0),
-                            TimeInterval = TimeSpan.FromSeconds(18),
-                            Repeat = MarcoEvent.RepeatType.RepeatForever
-                        },
-                        new MarcoEvent()
-                        {
-                            EventType = MarcoEvent.MarcoEventType.KeyboardEvent,
-                            KeyboardKey = VirtualKeyCode.VK_2,
-                            KeyEvent = MarcoEvent.KeyEventType.Press,
-                            StartTime = TimeSpan.FromSeconds(9),
-                            TimeInterval = TimeSpan.FromSeconds(18),
-                            Repeat = MarcoEvent.RepeatType.RepeatForever
-                        },
-
-                        #endregion Flask
-
-                        #region Skill
-
-                        new MarcoEvent()
-                        {
-                            EventType = MarcoEvent.MarcoEventType.KeyboardEvent,
-                            KeyboardKey = VirtualKeyCode.VK_W,
-                            KeyEvent = MarcoEvent.KeyEventType.Press,
-                            StartTime = TimeSpan.FromSeconds(0.5),
-                            TimeInterval = TimeSpan.FromSeconds(6.2),
-                            Repeat = MarcoEvent.RepeatType.RepeatForever
-                        },
-                        new MarcoEvent()
-                        {
-                            EventType = MarcoEvent.MarcoEventType.KeyboardEvent,
-                            KeyboardKey = VirtualKeyCode.VK_E,
-                            KeyEvent = MarcoEvent.KeyEventType.Press,
-                            StartTime = TimeSpan.FromSeconds(0.5),
-                            TimeInterval = TimeSpan.FromSeconds(6.2),
-                            Repeat = MarcoEvent.RepeatType.RepeatForever
-                        },
-                        new MarcoEvent()
-                        {
-                            EventType = MarcoEvent.MarcoEventType.KeyboardEvent,
-                            KeyboardKey = VirtualKeyCode.VK_R,
-                            KeyEvent = MarcoEvent.KeyEventType.Press,
-                            StartTime = TimeSpan.FromSeconds(0.5),
-                            TimeInterval = TimeSpan.FromSeconds(8.1),
-                            Repeat = MarcoEvent.RepeatType.RepeatForever
-                        },
-                        new MarcoEvent()
-                        {
-                            EventType = MarcoEvent.MarcoEventType.KeyboardEvent,
-                            KeyboardKey = VirtualKeyCode.VK_T,
-                            KeyEvent = MarcoEvent.KeyEventType.Press,
-                            StartTime = TimeSpan.FromSeconds(0.5),
-                            TimeInterval = TimeSpan.FromSeconds(3.2),
-                            Repeat = MarcoEvent.RepeatType.RepeatForever
-                        },
-
-                        #endregion Skill
-                    };
+                    List<MarcoEvent> marcoEvents = DemoEvent.GetMabinogiSpiritWeaponEvents();
                     File.WriteAllText(file.FullName, JsonConvert.SerializeObject(marcoEvents, Formatting.Indented));
                 }
                 string text = File.ReadAllText(file.FullName);
@@ -169,51 +107,18 @@ namespace POE_Auto_Helper
             }
         }
 
-        private async static void RunMarco(List<MarcoEvent> marcoEvents)
+        private static void RunMarco(List<MarcoEvent> marcoEvents)
         {
-            // Grab the Scheduler instance from the Factory
-            StdSchedulerFactory factory = new StdSchedulerFactory();
-            IScheduler scheduler = await factory.GetScheduler();
-
-            // and start it off
-            await scheduler.Start();
-
             foreach (MarcoEvent marcoEvent in marcoEvents)
             {
-                // define the job and tie it to our HelloJob class
-                IJobDetail job = JobBuilder.Create<MarcoJob>()
-                    .WithIdentity(marcoEvent.GetHashCode().ToString(), "group1")
-                    .UsingJobData("marcoEvent", JsonConvert.SerializeObject(marcoEvent))
-                    .Build();
-
-                // Trigger the job to run now, and then repeat every 10 seconds
-                ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity(marcoEvent.GetHashCode().ToString(), "group1")
-                .StartAt(new DateTimeOffset(DateTime.Now + marcoEvent.StartTime, new TimeSpan(8, 0, 0)))
-                .WithSimpleSchedule(x =>
+                try
                 {
-                    switch (marcoEvent.Repeat)
-                    {
-                        case MarcoEvent.RepeatType.OneTime:
-                            break;
-
-                        case MarcoEvent.RepeatType.RepeatNTimes:
-                            x.WithInterval(marcoEvent.TimeInterval);
-                            x.WithRepeatCount(marcoEvent.NumberOfRepetitions);
-                            break;
-
-                        case MarcoEvent.RepeatType.RepeatForever:
-                            x.WithInterval(marcoEvent.TimeInterval);
-                            x.RepeatForever();
-                            break;
-
-                        default:
-                            break;
-                    }
-                })
-                .Build();
-
-                await scheduler.ScheduleJob(job, trigger);
+                    marcoEvent.Excute();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             }
         }
     }
