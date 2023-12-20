@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using WindowsInput.Native;
 
-namespace POE_Auto_Helper
+namespace AutoClicker
 {
     internal class DemoEvent
     {

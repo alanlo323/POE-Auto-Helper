@@ -11,7 +11,7 @@ using Newtonsoft.Json.Converters;
 using WindowsInput;
 using WindowsInput.Native;
 
-namespace POE_Auto_Helper
+namespace AutoClicker
 {
     internal class MarcoEvent
     {

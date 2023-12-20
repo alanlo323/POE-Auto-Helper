@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace POE_Auto_Helper
+namespace AutoClicker
 {
     internal class Program
     {
